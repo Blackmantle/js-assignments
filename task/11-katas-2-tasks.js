@@ -143,7 +143,69 @@ const PokerRank = {
 }
 
 function getPokerHandRank(hand) {
-    throw new Error('Not implemented');
+    const highСards = { 'A': 1, 'J': 11, 'Q': 12, 'K': 13 };
+    const sortedNumbers = hand.map(card => isNaN(parseInt(card)) ? highСards[card[0]] : parseInt(card)).sort((a, b) => a - b);
+    const isFlush = hand.map(card => card.slice(-1)).every((suit, i, arr) => suit === arr[0]);
+    const isStraightByHigh = sortedNumbers.map(item => item === 1 ? 14 : item).sort((a, b) => a - b).every((item, i, arr) => i === arr.length-1 ? true : item + 1 === arr[i+1]);
+    const isStraightByLow = sortedNumbers.every((item, i, arr) => i === arr.length-1 ? true : item + 1 === arr[i+1]);
+    if ((isStraightByHigh || isStraightByLow) && isFlush) {
+        return 8;
+    }
+
+    if ((sortedNumbers[0] === sortedNumbers[1] 
+        && sortedNumbers[1] === sortedNumbers[2] 
+        && sortedNumbers[2] === sortedNumbers[3])
+        || (sortedNumbers[1] === sortedNumbers[2] 
+        && sortedNumbers[2] === sortedNumbers[3] 
+        && sortedNumbers[3] === sortedNumbers[4])
+    ) {
+        return 7;
+    }
+
+    if ((sortedNumbers[0] === sortedNumbers[1] 
+        && sortedNumbers[2] === sortedNumbers[3] 
+        && sortedNumbers[3] === sortedNumbers[4])
+        || (sortedNumbers[0] === sortedNumbers[1] 
+        && sortedNumbers[1] === sortedNumbers[2]
+        && sortedNumbers[3] === sortedNumbers[4])
+    ) {
+        return 6;
+    }
+
+    if (isFlush) {
+        return 5;
+    }
+
+    if (isStraightByHigh || isStraightByLow) {
+        return 4;
+    }
+
+    if ((sortedNumbers[0] === sortedNumbers[1] 
+        && sortedNumbers[1] === sortedNumbers[2]) 
+        || (sortedNumbers[1] === sortedNumbers[2]
+        && sortedNumbers[2] === sortedNumbers[3])
+        || (sortedNumbers[2] === sortedNumbers[3]
+        && sortedNumbers[3] === sortedNumbers[4])
+    ) {
+        return 3;
+    }
+   
+    if ((sortedNumbers[0] === sortedNumbers[1] && sortedNumbers[2] === sortedNumbers[3])
+        || (sortedNumbers[0] === sortedNumbers[1] && sortedNumbers[3] === sortedNumbers[4])
+        || (sortedNumbers[1] === sortedNumbers[2] && sortedNumbers[3] === sortedNumbers[4])
+    ) {
+        return 2;
+    }
+
+    if ((sortedNumbers[0] === sortedNumbers[1]) 
+        || (sortedNumbers[1] === sortedNumbers[2]) 
+        || (sortedNumbers[2] === sortedNumbers[3])
+        || (sortedNumbers[3] === sortedNumbers[4])
+    ) {
+        return 1;
+    }
+
+    return 0
 }
 
 
