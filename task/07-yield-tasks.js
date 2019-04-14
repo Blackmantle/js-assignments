@@ -33,7 +33,26 @@
  *
  */
 function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+    let bottles = 99;
+    const fn1 = n => `${n} bottles of beer on the wall, ${n} bottles of beer.`;
+    const fn2 = n => `Take one down and pass it around, ${n} bottles of beer on the wall.`;
+    let fn = fn1;
+
+    while (bottles > 1) {
+        yield fn(bottles);
+        if (fn === fn1) {
+            fn = fn2;
+            bottles--;
+        } else {
+            fn = fn1;
+        }
+    }
+
+    yield 'Take one down and pass it around, 1 bottle of beer on the wall.';
+    yield '1 bottle of beer on the wall, 1 bottle of beer.';
+    yield 'Take one down and pass it around, no more bottles of beer on the wall.';
+    yield 'No more bottles of beer on the wall, no more bottles of beer.';
+    yield 'Go to the store and buy some more, 99 bottles of beer on the wall.';
 }
 
 
@@ -47,7 +66,14 @@ function* get99BottlesOfBeer() {
  *
  */
 function* getFibonacciSequence() {
-    throw new Error('Not implemented');
+    let prev = -1;
+    let next = 1;
+    while (true) {
+        let sum = prev + next;
+        prev = next;
+        next = sum;
+        yield next;
+    }
 }
 
 
@@ -82,7 +108,15 @@ function* getFibonacciSequence() {
  *
  */
 function* depthTraversalTree(root) {
-    throw new Error('Not implemented');
+    let nodes = [root];
+
+    while (nodes.length) {
+        let current = nodes.pop();
+        if (current.children) {
+            nodes = nodes.concat(current.children.reverse());
+        }
+        yield current;
+    }
 }
 
 
@@ -108,7 +142,14 @@ function* depthTraversalTree(root) {
  *
  */
 function* breadthTraversalTree(root) {
-    throw new Error('Not implemented');
+    let nodes = [root];
+
+    for (let node of nodes) {
+        if (node.children) {
+            nodes.push(...node.children);
+        }
+        yield node;
+    }
 }
 
 
@@ -126,7 +167,28 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    let s1 = source1();
+    let s2 = source2();
+    let first = s1.next().value;
+    let second = s2.next().value;
+
+    while (first || second) {
+        if (first && second) {
+            if (first < second) {
+                yield first;
+                first = s1.next().value;
+            } else {
+                yield second;
+                second = s2.next().value;
+            }
+        } else if (first !== undefined) {
+            yield first;
+            first = s1.next().value;
+        } else {
+            yield second;
+            second = s2.next().value;
+        }
+    }
 }
 
 

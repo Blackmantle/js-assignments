@@ -45,7 +45,27 @@ function findStringInSnakingPuzzle(puzzle, searchStr) {
  *    'abc' => 'abc','acb','bac','bca','cab','cba'
  */
 function* getPermutations(chars) {
-    throw new Error('Not implemented');
+    let result = [];
+
+    function f(str, pref) {
+        if (!str.length) {
+            result.push(pref);
+        }
+        for (let i = 0; i < str.length; i++) {
+            let sub = '';
+            for (let j = 0; j < str.length; j++) {
+                if (j != i) {
+                    sub += str[j];
+                }
+            }
+            f(sub, pref + str[i]);
+        }
+    }
+    f(chars, '');
+
+    for (let res of result) {
+        yield res;
+    }
 }
 
 
@@ -65,7 +85,14 @@ function* getPermutations(chars) {
  *    [ 1, 6, 5, 10, 8, 7 ] => 18  (buy at 1,6,5 and sell all at 10)
  */
 function getMostProfitFromStockQuotes(quotes) {
-    throw new Error('Not implemented');
+    if (!quotes.length) {
+        return 0;
+    }
+
+    const max = Math.max.apply(null, quotes);
+    const id = quotes.indexOf(max);
+
+    return quotes.slice(0, id).reduce((p, c) => p += max - c, 0) + getMostProfitFromStockQuotes(quotes.slice(id + 1));
 }
 
 
@@ -90,13 +117,25 @@ function UrlShortener() {
 }
 
 UrlShortener.prototype = {
+    decryptor: [],
 
     encode: function(url) {
-        throw new Error('Not implemented');
+        const link = url.slice(8, url.length);
+        this.decryptor = [...link.split('/')];
+        let code = '';
+        for (let i = 0; i < this.decryptor.length; i++) {
+            code += `${i},`;
+        }
+        return code.slice(0, code.length-1);
     },
     
     decode: function(code) {
-        throw new Error('Not implemented');
+        let res = 'https://';
+        let arr = code.split(',');
+        for (let i = 0; i < arr.length; i++) {
+            res += `${this.decryptor[i]}/`;
+        }
+        return res.slice(0, -1);
     } 
 }
 

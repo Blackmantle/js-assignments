@@ -22,7 +22,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 function parseDataFromRfc2822(value) {
-   throw new Error('Not implemented');
+   return new Date(value);
 }
 
 /**
@@ -37,7 +37,7 @@ function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 function parseDataFromIso8601(value) {
-   throw new Error('Not implemented');
+   return new Date(value);
 }
 
 
@@ -56,7 +56,7 @@ function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 function isLeapYear(date) {
-   throw new Error('Not implemented');
+   return new Date(date.getFullYear(), 1, 29).getDate() === 29;
 }
 
 
@@ -76,7 +76,16 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 function timeSpanToString(startDate, endDate) {
-   throw new Error('Not implemented');
+   let hours = endDate.getHours() - startDate.getHours();
+   hours = hours >= 10 ? hours : hours < 0 ? `0${-hours}` : `0${hours}`;
+   let minutes = endDate.getMinutes() - startDate.getMinutes();
+   minutes = minutes >= 10 ? minutes : minutes < 0 ? `0${-minutes}` : `0${minutes}`;
+   let seconds = endDate.getSeconds() - startDate.getSeconds();
+   seconds = seconds >= 10 ? seconds : seconds < 0 ? `0${-seconds}` : `0${seconds}`;
+   let milliseconds = endDate.getMilliseconds() - startDate.getMilliseconds();
+   milliseconds = milliseconds >= 100 ? milliseconds : milliseconds >= 10 ? `0${milliseconds}` : milliseconds < 0 ? `00${-milliseconds}` : `00${milliseconds}`;
+   
+   return `${hours}:${minutes}:${seconds}.${milliseconds}`;
 }
 
 
@@ -94,7 +103,11 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 function angleBetweenClockHands(date) {
-    throw new Error('Not implemented');
+   let hours = date.getUTCHours();
+   let minutes = date.getUTCMinutes();
+   let angle = Math.abs((hours % 12) * 60 + minutes - minutes * 12) * Math.PI / 360;
+   
+   return angle > Math.PI ? angle - Math.PI : angle;
 }
 
 

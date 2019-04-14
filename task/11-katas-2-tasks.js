@@ -34,7 +34,43 @@
  *
  */
 function parseBankAccount(bankAccount) {
-    throw new Error('Not implemented');
+    let res = '';
+    const arr = bankAccount.split('\n').map(element => element.split(/(.{3})/));
+
+    for (let i = 0; i < arr[0].length; i++) {
+        if (arr[0][i] === '   ' && arr[1][i] === '  |') {
+            res += 1;
+        }
+        if (arr[2][i] === '|_ ') {
+            res += 2;
+        }
+        if (arr[1][i] === ' _|' && arr[2][i] === ' _|') {
+            res += 3;
+        }
+        if (arr[0][i] === '   ' && arr[1][i] === '|_|') {
+            res += 4;
+        }
+        if (arr[1][i] === '|_ ' && arr[2][i] === ' _|') {
+            res += 5;
+        }
+        if (arr[1][i] === '|_ ' && arr[2][i] === '|_|') {
+            res += 6;
+        }
+        if (arr[0][i] === ' _ ' && arr[2][i] === '  |') {
+            res += 7;
+        }
+        if (arr[1][i] === '|_|' && arr[2][i] === '|_|') {
+            res += 8;
+        }
+        if (arr[1][i] === '|_|' && arr[2][i] === ' _|') {
+            res += 9;
+        }
+        if (arr[1][i] === '| |' && arr[2][i] === '|_|') {
+            res += 0;
+        }
+    }
+
+    return res;
 }
 
 
@@ -63,7 +99,14 @@ function parseBankAccount(bankAccount) {
  *                                                                                                'characters.'
  */
 function* wrapText(text, columns) {
-    throw new Error('Not implemented');
+    const arr = text.split(' ');
+    while (arr.length) {
+        let res = arr.shift();
+        while (arr[0] && res.length + arr[0].length < columns) {
+            res += ` ${arr.shift()}`;
+        }
+        yield res;
+    }
 }
 
 
